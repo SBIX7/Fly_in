@@ -1,0 +1,43 @@
+# ==========================================
+# CARTE DE TEST : THE GAUNTLET
+# Objectif : Tester toutes les variations du Parseur
+# ==========================================
+
+# 1. Définition du nombre de drones
+nb_drones: 120000
+
+# 2. Définition des hubs de départ et d'arrivée
+# Note : la capacité max_drones ici doit être ignorée par ton simulateur plus tard
+start_hub: S_Base 0 0 [color=green max_drones=100] 
+end_hub: G_Base 20 20 [color=yellow] 
+
+# 3. Définition des zones (Test des différents types et de l'ordre des métadonnées)
+
+# 3.a Zone normale avec toutes les métadonnées dans un ordre arbitraire
+hub: Checkpoint_Alpha 5 5 [max_drones=3 color=blue zone=normal]
+
+# 3.b Zone avec uniquement les paramètres par défaut (aucune métadonnée)
+hub: Pit_Stop 10 5
+
+# 3.c Zone prioritaire (coût de mouvement = 1, mais préférée)
+hub: Fast_Lane 10 10 [zone=priority color=cyan]
+
+# 3.d Zone restreinte (coût de mouvement = 2)
+hub: Danger_Zone 15 15 [color=red zone=restricted max_drones=1]
+
+# 3.e Zone bloquée (totalement inaccessible)
+hub: Wall_X 10 12 [zone=blocked color=gray]
+
+# 4. Définition des connexions (Test des capacités des liens)
+
+# 4.a Connexions basiques (capacité par défaut = 1)
+connection: S_Base-Checkpoint_Alpha
+connection: Checkpoint_Alpha-Wall_X
+connection: Wall_X-Danger_Zone
+
+# 4.b Connexions avec des capacités de flux personnalisées
+connection: S_Base-Pit_Stop [max_link_capacity=5]
+connection: Pit_Stop-Fast_Lane [max_link_capacity=3]
+connection: Fast_Lane-Danger_Zone [max_link_capacity=1]
+connection: Fast_Lane-G_Base [max_link_capacity=2]
+connection: Danger_Zone-G_Base

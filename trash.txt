@@ -1,0 +1,52 @@
+    nb_drone: int = map_data["nb_drones"]
+    zones: dict[str, Zone] = {}
+    # Creating Zones and store them in zones without defining connections
+    for hub, hub_data in map_data["hubs"].items():
+        name = hub
+        x = hub_data["x"]
+        y = hub_data["y"]
+        color = hub_data["metadata"]["color"]
+        zone_type = hub_data["metadata"]["zone"]
+        max_drones = hub_data["metadata"]["max_drones"]
+        zones[name] = Zone(name, x, y, color, zone_type, max_drones)
+    connections: set[tuple[str, str]] = parser.connections
+    # Assigning same connection object to connected zones
+    for connection in connections:
+        hub_a, hub_b = connection
+        max_link_cap = map_data["connections"][connection]["max_link_capacity"]
+        connection_object = Connection(hub_a, hub_b, max_link_cap)
+        zones[hub_a].connections[hub_b] = connection_object
+        zones[hub_b].connections[hub_a] = connection_object
+    # Assigne Zone object to start_zone and end_zone
+    start_hub: Zone = zones["start_hub"]
+    end_hub: Zone = zones["end_hub"]
+    # Constructing the orchest from Graph class
+    # graph = Graph(nb_drone, start_hub, end_hub, zones)
+
+
+
+
+
+
+            # Constructing the orchest from Graph class
+        # graph = Graph(nb_drone, start_hub, end_hub, self.zones)
+
+    # def add_zone(self, zone: Zone) -> None:
+    #     self.zones.update({zone.name: zone})
+
+    # def add_connection(self, connection: Connection) -> None:
+    #     if connection.zone_a not in self.adjacency:
+    #         self.adjacency[connection.zone_a] = {}
+    #     if connection.zone_b not in self.adjacency:
+    #         self.adjacency[connection.zone_b] = {}
+    #     self.adjacency[connection.zone_a][connection.zone_b] = connection
+    #     self.adjacency[connection.zone_b][connection.zone_a] = connection
+
+    # def get_neighbors(self, zone_name: str) -> list[Zone]:
+    #     zone_set = set()
+    #     for zone_a, zone_b in self.adjacency.items():
+    #         if zone_name == zone_a:
+    #             zone_set.add(zone_b)
+    #         if zone_name == zone_b:
+    #             zone_set.add(zone_a)
+    #     return list(zone_set)
