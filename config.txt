@@ -4,7 +4,7 @@
 # ==========================================
 
 # 1. Définition du nombre de drones
-nb_drones: 120000
+nb_drones: 10
 
 # 2. Définition des hubs de départ et d'arrivée
 # Note : la capacité max_drones ici doit être ignorée par ton simulateur plus tard

@@ -45,5 +45,5 @@ class Graph:
 
     def run_simulation(self):
         self._respawn_drones()
-        for drone, _ in self.drones.items():
-            print(drone)
+        # for drone, _ in self.drones.items():
+        #     print(drone)
