@@ -157,11 +157,11 @@ class Parser:
         name = match_objet.group(1)
         x = int(match_objet.group(2))
         y = int(match_objet.group(3))
-        if x < 0 or y < 0:
-            raise DataError(
-                f"[Parse Error] line {self.line_number}:",
-                "Invalid coordinates for hub. Expected (x,y) in N*N",
-            )
+        # if x < 0 or y < 0:
+        #     raise DataError(
+        #         f"[Parse Error] line {self.line_number}:",
+        #         "Invalid coordinates for hub. Expected (x,y) in N*N",
+        #     )
         if (
             (name in self.data_parsed["hubs"])
             or (name is self.data_parsed["start_hub"])

@@ -1,43 +1,118 @@
 # ==========================================
-# CARTE DE TEST : THE GAUNTLET
-# Objectif : Tester toutes les variations du Parseur
+# THE ULTIMATE FLEX: THE LIQUID MESH
+# Objective: Prove superiority over static 3-path algorithms
+# Concept: A highly interconnected neural net. Static algos will bottleneck.
+# Adaptive algos will flow like water through every single node.
 # ==========================================
 
-# 1. Définition du nombre de drones
-nb_drones: 10
+nb_drones: 25
 
-# 2. Définition des hubs de départ et d'arrivée
-# Note : la capacité max_drones ici doit être ignorée par ton simulateur plus tard
-start_hub: S_Base 0 0 [color=green max_drones=100] 
-end_hub: G_Base 20 20 [color=yellow] 
+start_hub: Source 0 30 [color=white max_drones=250]
+end_hub: Sink 100 30 [color=white max_drones=250]
 
-# 3. Définition des zones (Test des différents types et de l'ordre des métadonnées)
+# --- THE MESH NODES (Capacity 2 to force rapid saturation) ---
+# Column 1
+hub: A1 20 10 [max_drones=2 color=cyan]
+hub: B1 20 20 [max_drones=2]
+hub: C1 20 30 [max_drones=2]
+hub: D1 20 40 [max_drones=2]
+hub: E1 20 50 [max_drones=2]
+hub: F1 20 60 [max_drones=2 color=cyan]
 
-# 3.a Zone normale avec toutes les métadonnées dans un ordre arbitraire
-hub: Checkpoint_Alpha 5 5 [max_drones=3 color=blue zone=normal]
+# Column 2
+hub: A2 40 10 [max_drones=2 color=cyan]
+hub: B2 40 20 [max_drones=2]
+hub: C2 40 30 [max_drones=2 zone=restricted]
+hub: D2 40 40 [max_drones=2 zone=restricted]
+hub: E2 40 50 [max_drones=2]
+hub: F2 40 60 [max_drones=2 color=cyan]
 
-# 3.b Zone avec uniquement les paramètres par défaut (aucune métadonnée)
-hub: Pit_Stop 10 5
+# Column 3
+hub: A3 60 10 [max_drones=2 color=cyan]
+hub: B3 60 20 [max_drones=2]
+hub: C3 60 30 [max_drones=2 zone=restricted]
+hub: D3 60 40 [max_drones=2 zone=restricted]
+hub: E3 60 50 [max_drones=2]
+hub: F3 60 60 [max_drones=2 color=cyan]
 
-# 3.c Zone prioritaire (coût de mouvement = 1, mais préférée)
-hub: Fast_Lane 10 10 [zone=priority color=cyan]
+# Column 4
+hub: A4 80 10 [max_drones=2 color=cyan]
+hub: B4 80 20 [max_drones=2]
+hub: C4 80 30 [max_drones=2]
+hub: D4 80 40 [max_drones=2]
+hub: E4 80 50 [max_drones=2]
+hub: F4 80 60 [max_drones=2 color=cyan]
 
-# 3.d Zone restreinte (coût de mouvement = 2)
-hub: Danger_Zone 15 15 [color=red zone=restricted max_drones=1]
+# ==========================================
+# THE BRAIDED CONNECTIONS (Massive Branching)
+# ==========================================
 
-# 3.e Zone bloquée (totalement inaccessible)
-hub: Wall_X 10 12 [zone=blocked color=gray]
+# Injecting the water into the sponge
+connection: Source-A1
+connection: Source-B1
+connection: Source-C1 [max_link_capacity=3]
+connection: Source-D1 [max_link_capacity=3]
+connection: Source-E1
+connection: Source-F1
 
-# 4. Définition des connexions (Test des capacités des liens)
+# Col 1 to Col 2 (Straight, Up-Diagonal, Down-Diagonal)
+connection: A1-A2
+connection: A1-B2
+connection: B1-A2
+connection: B1-B2
+connection: B1-C2
+connection: C1-B2
+connection: C1-C2
+connection: C1-D2
+connection: D1-C2
+connection: D1-D2
+connection: D1-E2
+connection: E1-D2
+connection: E1-E2
+connection: E1-F2
+connection: F1-E2
+connection: F1-F2
 
-# 4.a Connexions basiques (capacité par défaut = 1)
-connection: S_Base-Checkpoint_Alpha
-connection: Checkpoint_Alpha-Wall_X
-connection: Wall_X-Danger_Zone
+# Col 2 to Col 3
+connection: A2-A3
+connection: A2-B3
+connection: B2-A3
+connection: B2-B3
+connection: B2-C3
+connection: C2-B3
+connection: C2-C3
+connection: C2-D3
+connection: D2-C3
+connection: D2-D3
+connection: D2-E3
+connection: E2-D3
+connection: E2-E3
+connection: E2-F3
+connection: F2-E3
+connection: F2-F3
 
-# 4.b Connexions avec des capacités de flux personnalisées
-connection: S_Base-Pit_Stop [max_link_capacity=5]
-connection: Pit_Stop-Fast_Lane [max_link_capacity=3]
-connection: Fast_Lane-Danger_Zone [max_link_capacity=1]
-connection: Fast_Lane-G_Base [max_link_capacity=2]
-connection: Danger_Zone-G_Base
+# Col 3 to Col 4
+connection: A3-A4
+connection: A3-B4
+connection: B3-A4
+connection: B3-B4
+connection: B3-C4
+connection: C3-B4
+connection: C3-C4
+connection: C3-D4
+connection: D3-C4
+connection: D3-D4
+connection: D3-E4
+connection: E3-D4
+connection: E3-E4
+connection: E3-F4
+connection: F3-E4
+connection: F3-F4
+
+# Extracting the water to the Sink
+connection: A4-Sink
+connection: B4-Sink
+connection: C4-Sink [max_link_capacity=3]
+connection: D4-Sink [max_link_capacity=3]
+connection: E4-Sink
+connection: F4-Sink
