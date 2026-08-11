@@ -173,7 +173,8 @@ class Graph:
                         if isinstance(drone.path[turn], Zone):
                             destination = drone.path[turn].name
                         else:
-                            destination = f"{drone.path[turn].zone_a}-{drone.path[turn].zone_b}"
+                            destination = f"{drone.path[turn].zone_a}-"
+                            destination += f"{drone.path[turn].zone_b}"
 
                         turn_mvt.append(f"D{drone.drone_id}-{destination}")
 
