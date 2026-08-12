@@ -13,9 +13,9 @@ class Graph:
         self.start_hub: Zone
         self.end_hub: Zone
         self.drones: dict[str, Drone] = {}
-        self.agenda: dict[int, dict[str, int]] = {}
+        self.agenda: dict[int, dict[Zone | Connection, int]] = {}
 
-    def fill_zones(self, connections: set[tuple[str, str]]):
+    def fill_zones(self, connections: set[tuple[str, str]]) -> None:
         # Creating Zones and store them in zones without defining connections
         for hub, hub_data in self.map_data["hubs"].items():
             name = hub
@@ -41,7 +41,7 @@ class Graph:
             self.start_hub = self.zones[start_name]
             self.end_hub = self.zones[end_name]
 
-    def _respawn_drones(self):
+    def _respawn_drones(self) -> None:
         for i in range(self.nb_drone):
             self.drones[f"{i+1}"] = Drone(f"{i+1}", self.start_hub)
 
@@ -55,7 +55,7 @@ class Graph:
         return zone1.connections.get(zone2.name)
 
     # This private methode will help me fill the agenda to use it in BFS 3D
-    def _book_space(self, turn: int, space: Zone | Connection):
+    def _book_space(self, turn: int, space: Zone | Connection) -> None:
         if turn in self.agenda.keys():
             if self.agenda[turn].get(space) is None:
                 self.agenda[turn][space] = 1
@@ -88,8 +88,8 @@ class Graph:
         queue: deque[tuple[Zone, int, list[Zone]]] = deque()
         visited: set[tuple[Zone, int]] = set()
         # Initializing BFS Data
-        queue.append((drone.current_location, 0, [drone.current_location]))
-        visited.add((drone.current_location, 0))
+        queue.append((self.start_hub, 0, [self.start_hub]))
+        visited.add((self.start_hub, 0))
         # Looping over space and check over time the path
         while queue:
             zone, turn, path = queue.popleft()
@@ -109,15 +109,17 @@ class Graph:
                     ):
                         connection = self._get_connection(path[i], path[i + 1])
                         self._book_space(clock, path[i + 1])
-                        self._book_space(clock, connection)
+                        if connection is not None:
+                            self._book_space(clock, connection)
                         time_line.append(path[i + 1])
                     elif path[i + 1].zone_type == "restricted":
                         clock += 1
                         connection = self._get_connection(path[i], path[i + 1])
-                        self._book_space(clock - 1, connection)
+                        if connection is not None:
+                            self._book_space(clock - 1, connection)
+                            self._book_space(clock, connection)
+                            time_line.append(connection)
                         self._book_space(clock, path[i + 1])
-                        self._book_space(clock, connection)
-                        time_line.append(connection)
                         time_line.append(path[i + 1])
                 return time_line
             # Receive a list of neighbors sorted based on zone priority
@@ -138,8 +140,10 @@ class Graph:
                 if zone_type in ("normal", "priority"):
                     if (neighbor, turn + 1) in visited:
                         continue
-                    if self._is_free(turn + 1, neighbor) and self._is_free(
-                        turn + 1, connection
+                    if (
+                        self._is_free(turn + 1, neighbor)
+                        and connection is not None
+                        and self._is_free(turn + 1, connection)
                     ):
                         neighbor_path = path + [neighbor]
                         queue.append((neighbor, turn + 1, neighbor_path))
@@ -148,15 +152,17 @@ class Graph:
                     if (neighbor, turn + 2) in visited:
                         continue
                     if (
-                        self._is_free(turn + 1, connection)
+                        connection is not None
+                        and self._is_free(turn + 1, connection)
                         and self._is_free(turn + 2, connection)
                         and self._is_free(turn + 2, neighbor)
                     ):
                         neighbor_path = path + [neighbor]
                         queue.append((neighbor, turn + 2, neighbor_path))
                         visited.add((neighbor, turn + 2))
+        raise ValueError(f"No path found for drone {drone}")
 
-    def run_simulation(self):
+    def run_simulation(self) -> None:
         self._respawn_drones()
         for _, drone in self.drones.items():
             drone.path = self._calculate_path_for_drone(drone)
@@ -170,12 +176,12 @@ class Graph:
             for _, drone in self.drones.items():
                 if turn < len(drone.path):
                     if drone.path[turn] != drone.path[turn - 1]:
-                        if isinstance(drone.path[turn], Zone):
-                            destination = drone.path[turn].name
+                        current_space = drone.path[turn]
+                        if isinstance(current_space, Zone):
+                            destination = current_space.name
                         else:
-                            destination = f"{drone.path[turn].zone_a}-"
-                            destination += f"{drone.path[turn].zone_b}"
-
+                            destination = f"{current_space.zone_a}-"
+                            destination += f"{current_space.zone_b}"
                         turn_mvt.append(f"D{drone.drone_id}-{destination}")
 
             if turn_mvt:

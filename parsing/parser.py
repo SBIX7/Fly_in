@@ -45,9 +45,7 @@ class Parser:
         self.line_number: int = 0
         self.connections: set[tuple[str, str]] = set()
 
-    def _valid_meta_hub_(
-        self, meta_data: str | None
-    ) -> MetaHub:
+    def _valid_meta_hub_(self, meta_data: str | None) -> MetaHub:
         meta_hub_param: set[str] = {"zone", "color", "max_drones"}
         ret_dict: MetaHub = {"zone": "normal", "color": None, "max_drones": 1}
         if meta_data is None:
@@ -96,7 +94,7 @@ class Parser:
                     ret_dict["max_drones"] = max_drone
         return ret_dict
 
-    def _connection_validator(self, match_objet: Match[str]):
+    def _connection_validator(self, match_objet: Match[str]) -> None:
         if match_objet is None:
             raise DataError(
                 f"[Parse Error] line {self.line_number}:",
@@ -148,7 +146,7 @@ class Parser:
 
     def _hub_validator(
         self, match_objet: Match[str], hub_type: str | None = None
-    ):
+    ) -> None:
         if match_objet is None:
             raise DataError(
                 f"[Parse Error] line {self.line_number}:",
@@ -253,7 +251,7 @@ class Parser:
         )
         return match
 
-    def parse(self):
+    def parse(self) -> None:
         with open(self.config_file_path) as f:
             for line in f:
                 self.line_number += 1
@@ -263,6 +261,8 @@ class Parser:
                 # Extracting number of drones
                 if line.startswith("nb_drones"):
                     match = self._parse_drone_number(line)
+                    if match is None:
+                        return None
                     if match.group(2):
                         raise DataError(
                             f"[Parse Error] line {self.line_number}:",
@@ -277,6 +277,8 @@ class Parser:
                 # Extracting start_hub
                 elif line.startswith("start_hub"):
                     match = self._parse_start_hub(line)
+                    if match is None:
+                        return None
                     if self.data_parsed["start_hub"] is not None:
                         raise DataError(
                             f"[Parse Error] line {self.line_number}:",
@@ -286,6 +288,8 @@ class Parser:
                 # Extracting end_hub
                 elif line.startswith("end_hub"):
                     match = self._parse_end_hub(line)
+                    if match is None:
+                        return None
                     if self.data_parsed["end_hub"] is not None:
                         raise DataError(
                             f"[Parse Error] line {self.line_number}:",
@@ -295,23 +299,17 @@ class Parser:
                 # Extracting hub
                 elif line.startswith("hub"):
                     match = self._parse_hub(line)
+                    if match is None:
+                        return None
                     self._hub_validator(match, None)
                 # Extracting connection
                 elif line.startswith("connection"):
                     match = self._parse_connection(line)
+                    if match is None:
+                        return None
                     self._connection_validator(match)
                 else:
                     raise DataError(
                         f"[Parse Error] line {self.line_number}:",
                         "Data is not valid or not accomplished",
                     )
-
-
-# def testing_the_parser():
-#     parser = Parser("./config.txt")
-#     parser.parse()
-#     pprint.pprint(parser.data_parsed, indent=2)
-
-
-# if __name__ == "__main__":
-#     testing_the_parser()

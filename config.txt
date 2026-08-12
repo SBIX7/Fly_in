@@ -5,7 +5,7 @@
 # Adaptive algos will flow like water through every single node.
 # ==========================================
 
-nb_drones: 25
+nb_drones: 50
 
 start_hub: Source 0 30 [color=white max_drones=250]
 end_hub: Sink 100 30 [color=white max_drones=250]
