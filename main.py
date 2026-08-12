@@ -1,20 +1,25 @@
 from models import Graph
 from parsing import Parser
-
-# def get_hub_info(hub_name: str, )
+import argparse
+import sys
 
 if __name__ == "__main__":
+    arg_parser = argparse.ArgumentParser(description="To support options")
+    arg_parser.add_argument(
+        "--map",
+        type=str,
+        nargs="?",
+        help="Add path to map",
+        default="./map.txt",
+    )
+    args = arg_parser.parse_args()
+    parser = Parser(args.map)
     try:
-        parser = Parser("./config.txt")
-    except Exception:
-        pass
-    parser.parse()
+        parser.parse()
+    except Exception as e:
+        print(e)
+        sys.exit(2)
     data = parser.data_parsed
     graph = Graph(data)
     graph.fill_zones(parser.connections)
     graph.run_simulation()
-    # print(graph.start_hub)
-    # print(graph.end_hub)
-    # for name, info in graph.zones.items():
-    #     print(name)
-    #     print(f"{info.name}- {info.connections.keys()}\n\n")

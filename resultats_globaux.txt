@@ -1,0 +1,719 @@
+==================================================================
+📍 CARTE : ./maps/challenger/01_the_impossible_dream.txt
+==================================================================
+--- CONTENU DE LA CARTE ---
+# CHALLENGER LEVEL: THE IMPOSSIBLE DREAM
+# WARNING: This map is designed to be extremely challenging and may not be solvable
+# by most algorithms. It's intended as a stress test and research challenge.
+# The goal is NOT to validate this map but to push algorithmic limits.
+
+nb_drones: 25
+
+# === LAYER 0: The Nightmare Begins ===
+start_hub: start 0 0 [color=green]
+
+# Single-file entry gates (extreme bottleneck)
+hub: gate_hell1 2 0 [color=red max_drones=1]
+hub: gate_hell2 3 0 [color=red max_drones=1]
+hub: gate_hell3 4 0 [color=red max_drones=1]
+hub: gate_hell4 5 0 [color=red max_drones=1]
+hub: gate_hell5 6 0 [color=red max_drones=1]
+
+# === LAYER 1: The Maze of Despair ===
+# Multiple interconnected dead ends and loops
+hub: maze_trap_a1 2 1 [color=purple]
+hub: maze_trap_a2 3 1 [color=purple]
+hub: maze_trap_a3 4 1 [color=purple]
+hub: maze_dead_a 5 1 [color=black]
+
+hub: maze_trap_b1 2 -1 [color=purple]
+hub: maze_trap_b2 3 -1 [color=purple]
+hub: maze_trap_b3 4 -1 [color=purple]
+hub: maze_dead_b 5 -1 [color=black]
+
+hub: maze_loop1 2 2 [zone=restricted color=brown]
+hub: maze_loop2 3 2 [zone=restricted color=brown]
+hub: maze_loop3 4 2 [zone=restricted color=brown]
+hub: maze_loop4 5 2 [zone=restricted color=brown]
+hub: maze_loop5 6 2 [zone=restricted color=brown]
+hub: maze_loop6 6 1 [zone=restricted color=brown]
+
+# === LAYER 2: The Capacity Nightmare ===
+hub: micro_gate1 7 0 [color=orange max_drones=1]
+hub: micro_gate2 8 0 [color=orange max_drones=1]
+hub: micro_gate3 9 0 [color=orange max_drones=1]
+
+# Overflow areas with terrible costs
+hub: overflow_hell1 7 1 [zone=restricted color=maroon max_drones=2]
+hub: overflow_hell2 8 1 [zone=restricted color=maroon max_drones=2]
+hub: overflow_hell3 9 1 [zone=restricted color=maroon max_drones=2]
+hub: overflow_hell4 7 -1 [zone=restricted color=maroon max_drones=2]
+hub: overflow_hell5 8 -1 [zone=restricted color=maroon max_drones=2]
+hub: overflow_hell6 9 -1 [zone=restricted color=maroon max_drones=2]
+
+# === LAYER 3: The False Hope Section ===
+# Priority zones that lead to more traps
+hub: false_hope1 10 0 [zone=priority color=gold max_drones=3]
+hub: false_hope2 11 0 [zone=priority color=gold max_drones=2]
+hub: false_hope3 12 0 [zone=priority color=gold max_drones=1]
+
+# More dead ends disguised as good paths
+hub: priority_trap1 10 1 [zone=priority color=gold]
+hub: priority_trap2 11 1 [zone=priority color=gold]
+hub: priority_dead 12 1 [color=black]
+
+hub: priority_trap3 10 -1 [zone=priority color=gold]
+hub: priority_trap4 11 -1 [zone=priority color=gold]
+hub: priority_dead2 12 -1 [color=black]
+
+# === LAYER 4: The Convergence Hell ===
+# Multiple restricted paths that must merge
+hub: conv_restricted1 13 2 [zone=restricted color=darkred max_drones=1]
+hub: conv_restricted2 14 2 [zone=restricted color=darkred max_drones=1]
+hub: conv_restricted3 15 2 [zone=restricted color=darkred max_drones=1]
+
+hub: conv_restricted4 13 0 [zone=restricted color=darkred max_drones=1]
+hub: conv_restricted5 14 0 [zone=restricted color=darkred max_drones=1]
+hub: conv_restricted6 15 0 [zone=restricted color=darkred max_drones=1]
+
+hub: conv_restricted7 13 -2 [zone=restricted color=darkred max_drones=1]
+hub: conv_restricted8 14 -2 [zone=restricted color=darkred max_drones=1]
+hub: conv_restricted9 15 -2 [zone=restricted color=darkred max_drones=1]
+
+# === LAYER 5: The Final Gauntlet of Doom ===
+hub: final_merge 16 0 [color=violet max_drones=5]
+hub: final_torture1 17 0 [color=crimson max_drones=2]
+hub: final_torture2 18 0 [color=crimson max_drones=1]
+hub: final_torture3 19 0 [color=crimson max_drones=1]
+hub: final_torture4 20 0 [color=crimson max_drones=1]
+hub: final_torture5 21 0 [color=crimson max_drones=1]
+
+# The ultimate goal
+end_hub: impossible_goal 23 0 [color=rainbow]
+
+# === CONNECTIONS: The Web of Suffering ===
+
+# Layer 0 connections (bottleneck hell)
+connection: start-gate_hell1 [max_link_capacity=1]
+connection: gate_hell1-gate_hell2 [max_link_capacity=1]
+connection: gate_hell2-gate_hell3 [max_link_capacity=1]
+connection: gate_hell3-gate_hell4 [max_link_capacity=1]
+connection: gate_hell4-gate_hell5 [max_link_capacity=1]
+
+# Layer 1 connections (maze of despair)
+connection: gate_hell1-maze_trap_a1
+connection: gate_hell2-maze_trap_b1
+connection: gate_hell3-maze_loop1
+
+connection: maze_trap_a1-maze_trap_a2
+connection: maze_trap_a2-maze_trap_a3
+connection: maze_trap_a3-maze_dead_a
+
+connection: maze_trap_b1-maze_trap_b2
+connection: maze_trap_b2-maze_trap_b3
+connection: maze_trap_b3-maze_dead_b
+
+connection: maze_loop1-maze_loop2
+connection: maze_loop2-maze_loop3
+connection: maze_loop3-maze_loop4
+connection: maze_loop4-maze_loop5
+connection: maze_loop5-maze_loop6
+connection: maze_loop6-maze_loop1
+
+# Escape routes from maze (very limited)
+connection: maze_trap_a2-micro_gate1
+connection: maze_trap_b2-micro_gate1
+connection: maze_loop3-micro_gate2
+
+# Layer 2 connections (capacity nightmare)
+connection: gate_hell5-micro_gate1
+connection: micro_gate1-micro_gate2
+connection: micro_gate2-micro_gate3
+
+# Overflow hell connections
+connection: micro_gate1-overflow_hell1
+connection: micro_gate2-overflow_hell2
+connection: micro_gate3-overflow_hell3
+connection: micro_gate1-overflow_hell4
+connection: micro_gate2-overflow_hell5
+connection: micro_gate3-overflow_hell6
+
+connection: overflow_hell1-overflow_hell2
+connection: overflow_hell2-overflow_hell3
+connection: overflow_hell4-overflow_hell5
+connection: overflow_hell5-overflow_hell6
+
+connection: overflow_hell3-false_hope1
+connection: overflow_hell6-false_hope1
+
+# Layer 3 connections (false hope)
+connection: micro_gate3-false_hope1
+connection: false_hope1-false_hope2
+connection: false_hope2-false_hope3
+
+# False hope traps
+connection: false_hope1-priority_trap1
+connection: false_hope2-priority_trap2
+connection: false_hope3-priority_dead
+
+connection: false_hope1-priority_trap3
+connection: false_hope2-priority_trap4
+connection: false_hope3-priority_dead2
+
+connection: priority_trap1-priority_trap2
+connection: priority_trap3-priority_trap4
+
+# Layer 4 connections (convergence hell)
+connection: false_hope3-conv_restricted1
+connection: false_hope3-conv_restricted4
+connection: false_hope3-conv_restricted7
+
+connection: conv_restricted1-conv_restricted2
+connection: conv_restricted2-conv_restricted3
+connection: conv_restricted4-conv_restricted5
+connection: conv_restricted5-conv_restricted6
+connection: conv_restricted7-conv_restricted8
+connection: conv_restricted8-conv_restricted9
+
+connection: conv_restricted3-final_merge
+connection: conv_restricted6-final_merge
+connection: conv_restricted9-final_merge
+
+# Layer 5 connections (final gauntlet)
+connection: final_merge-final_torture1
+connection: final_torture1-final_torture2
+connection: final_torture2-final_torture3
+connection: final_torture3-final_torture4
+connection: final_torture4-final_torture5
+connection: final_torture5-impossible_goal
+
+# Emergency bypass routes (extremely expensive)
+connection: overflow_hell1-conv_restricted1
+connection: overflow_hell4-conv_restricted7
+connection: priority_trap1-conv_restricted4
+
+--- RÉSULTATS DE LA SIMULATION ---
+D1-gate_hell1
+D1-maze_trap_a1 D2-gate_hell1
+D1-maze_trap_a2 D2-maze_trap_a1 D3-gate_hell1
+D1-micro_gate1 D2-maze_trap_a2 D3-maze_trap_a1 D4-gate_hell1
+D1-micro_gate1-overflow_hell4 D2-micro_gate1 D3-maze_trap_a2 D4-maze_trap_a1 D5-gate_hell1
+D1-overflow_hell4 D2-micro_gate1-overflow_hell1 D3-micro_gate1 D4-maze_trap_a2 D5-maze_trap_a1 D6-gate_hell1
+D1-conv_restricted7-overflow_hell4 D2-overflow_hell1 D3-micro_gate1-overflow_hell4 D4-micro_gate1 D5-maze_trap_a2 D6-maze_trap_a1 D7-gate_hell1
+D1-conv_restricted7 D2-conv_restricted1-overflow_hell1 D3-overflow_hell4 D4-micro_gate1-overflow_hell1 D5-micro_gate1 D6-maze_trap_a2 D7-maze_trap_a1 D8-gate_hell1
+D1-conv_restricted7-conv_restricted8 D2-conv_restricted1 D3-conv_restricted7-overflow_hell4 D4-overflow_hell1 D5-micro_gate1-overflow_hell4 D6-micro_gate1 D7-maze_trap_a2 D8-maze_trap_a1 D9-gate_hell1
+D1-conv_restricted8 D2-conv_restricted1-conv_restricted2 D3-conv_restricted7 D4-conv_restricted1-overflow_hell1 D5-overflow_hell4 D6-micro_gate1-overflow_hell1 D7-micro_gate1 D8-maze_trap_a2 D9-maze_trap_a1 D10-gate_hell1
+D1-conv_restricted8-conv_restricted9 D2-conv_restricted2 D3-conv_restricted7-conv_restricted8 D4-conv_restricted1 D5-conv_restricted7-overflow_hell4 D6-overflow_hell1 D7-micro_gate1-overflow_hell4 D8-micro_gate1 D9-maze_trap_a2 D10-maze_trap_a1 D11-gate_hell1
+D1-conv_restricted9 D2-conv_restricted2-conv_restricted3 D3-conv_restricted8 D4-conv_restricted1-conv_restricted2 D5-conv_restricted7 D6-conv_restricted1-overflow_hell1 D7-overflow_hell4 D8-micro_gate1-overflow_hell1 D9-micro_gate1 D10-maze_trap_a2 D11-maze_trap_a1 D12-gate_hell1
+D1-final_merge D2-conv_restricted3 D3-conv_restricted8-conv_restricted9 D4-conv_restricted2 D5-conv_restricted7-conv_restricted8 D6-conv_restricted1 D7-conv_restricted7-overflow_hell4 D8-overflow_hell1 D9-micro_gate1-overflow_hell4 D10-micro_gate1 D11-maze_trap_a2 D12-maze_trap_a1 D13-gate_hell1
+D1-final_torture1 D2-final_merge D3-conv_restricted9 D4-conv_restricted2-conv_restricted3 D5-conv_restricted8 D6-conv_restricted1-conv_restricted2 D7-conv_restricted7 D8-conv_restricted1-overflow_hell1 D9-overflow_hell4 D10-micro_gate1-overflow_hell1 D11-micro_gate1 D12-maze_trap_a2 D13-maze_trap_a1 D14-gate_hell1
+D1-final_torture2 D2-final_torture1 D3-final_merge D4-conv_restricted3 D5-conv_restricted8-conv_restricted9 D6-conv_restricted2 D7-conv_restricted7-conv_restricted8 D8-conv_restricted1 D9-conv_restricted7-overflow_hell4 D10-overflow_hell1 D11-micro_gate1-overflow_hell4 D12-micro_gate1 D13-maze_trap_a2 D14-maze_trap_a1 D15-gate_hell1
+D1-final_torture3 D2-final_torture2 D3-final_torture1 D4-final_merge D5-conv_restricted9 D6-conv_restricted2-conv_restricted3 D7-conv_restricted8 D8-conv_restricted1-conv_restricted2 D9-conv_restricted7 D10-conv_restricted1-overflow_hell1 D11-overflow_hell4 D12-micro_gate1-overflow_hell1 D13-micro_gate1 D14-maze_trap_a2 D15-maze_trap_a1 D16-gate_hell1
+D1-final_torture4 D2-final_torture3 D3-final_torture2 D4-final_torture1 D5-final_merge D6-conv_restricted3 D7-conv_restricted8-conv_restricted9 D8-conv_restricted2 D9-conv_restricted7-conv_restricted8 D10-conv_restricted1 D11-conv_restricted7-overflow_hell4 D12-overflow_hell1 D13-micro_gate1-overflow_hell4 D14-micro_gate1 D15-maze_trap_a2 D16-maze_trap_a1 D17-gate_hell1
+D1-final_torture5 D2-final_torture4 D3-final_torture3 D4-final_torture2 D5-final_torture1 D6-final_merge D7-conv_restricted9 D8-conv_restricted2-conv_restricted3 D9-conv_restricted8 D10-conv_restricted1-conv_restricted2 D11-conv_restricted7 D12-conv_restricted1-overflow_hell1 D13-overflow_hell4 D14-micro_gate1-overflow_hell1 D15-micro_gate1 D16-maze_trap_a2 D17-maze_trap_a1 D18-gate_hell1
+D1-impossible_goal D2-final_torture5 D3-final_torture4 D4-final_torture3 D5-final_torture2 D6-final_torture1 D7-final_merge D8-conv_restricted3 D9-conv_restricted8-conv_restricted9 D10-conv_restricted2 D11-conv_restricted7-conv_restricted8 D12-conv_restricted1 D13-conv_restricted7-overflow_hell4 D14-overflow_hell1 D15-micro_gate1-overflow_hell4 D16-micro_gate1 D17-maze_trap_a2 D18-maze_trap_a1 D19-gate_hell1
+D2-impossible_goal D3-final_torture5 D4-final_torture4 D5-final_torture3 D6-final_torture2 D7-final_torture1 D8-final_merge D9-conv_restricted9 D10-conv_restricted2-conv_restricted3 D11-conv_restricted8 D12-conv_restricted1-conv_restricted2 D13-conv_restricted7 D14-conv_restricted1-overflow_hell1 D15-overflow_hell4 D16-micro_gate1-overflow_hell1 D17-micro_gate1 D18-maze_trap_a2 D19-maze_trap_a1 D20-gate_hell1
+D3-impossible_goal D4-final_torture5 D5-final_torture4 D6-final_torture3 D7-final_torture2 D8-final_torture1 D9-final_merge D10-conv_restricted3 D11-conv_restricted8-conv_restricted9 D12-conv_restricted2 D13-conv_restricted7-conv_restricted8 D14-conv_restricted1 D15-conv_restricted7-overflow_hell4 D16-overflow_hell1 D17-micro_gate1-overflow_hell4 D18-micro_gate1 D19-maze_trap_a2 D20-maze_trap_a1 D21-gate_hell1
+D4-impossible_goal D5-final_torture5 D6-final_torture4 D7-final_torture3 D8-final_torture2 D9-final_torture1 D10-final_merge D11-conv_restricted9 D12-conv_restricted2-conv_restricted3 D13-conv_restricted8 D14-conv_restricted1-conv_restricted2 D15-conv_restricted7 D16-conv_restricted1-overflow_hell1 D17-overflow_hell4 D18-micro_gate1-overflow_hell1 D19-micro_gate1 D20-maze_trap_a2 D21-maze_trap_a1 D22-gate_hell1
+D5-impossible_goal D6-final_torture5 D7-final_torture4 D8-final_torture3 D9-final_torture2 D10-final_torture1 D11-final_merge D12-conv_restricted3 D13-conv_restricted8-conv_restricted9 D14-conv_restricted2 D15-conv_restricted7-conv_restricted8 D16-conv_restricted1 D17-conv_restricted7-overflow_hell4 D18-overflow_hell1 D19-micro_gate1-overflow_hell4 D20-micro_gate1 D21-maze_trap_a2 D22-maze_trap_a1 D23-gate_hell1
+D6-impossible_goal D7-final_torture5 D8-final_torture4 D9-final_torture3 D10-final_torture2 D11-final_torture1 D12-final_merge D13-conv_restricted9 D14-conv_restricted2-conv_restricted3 D15-conv_restricted8 D16-conv_restricted1-conv_restricted2 D17-conv_restricted7 D18-conv_restricted1-overflow_hell1 D19-overflow_hell4 D20-micro_gate1-overflow_hell1 D21-micro_gate1 D22-maze_trap_a2 D23-maze_trap_a1 D24-gate_hell1
+D7-impossible_goal D8-final_torture5 D9-final_torture4 D10-final_torture3 D11-final_torture2 D12-final_torture1 D13-final_merge D14-conv_restricted3 D15-conv_restricted8-conv_restricted9 D16-conv_restricted2 D17-conv_restricted7-conv_restricted8 D18-conv_restricted1 D19-conv_restricted7-overflow_hell4 D20-overflow_hell1 D21-micro_gate1-overflow_hell4 D22-micro_gate1 D23-maze_trap_a2 D24-maze_trap_a1 D25-gate_hell1
+D8-impossible_goal D9-final_torture5 D10-final_torture4 D11-final_torture3 D12-final_torture2 D13-final_torture1 D14-final_merge D15-conv_restricted9 D16-conv_restricted2-conv_restricted3 D17-conv_restricted8 D18-conv_restricted1-conv_restricted2 D19-conv_restricted7 D20-conv_restricted1-overflow_hell1 D21-overflow_hell4 D22-micro_gate1-overflow_hell1 D23-micro_gate1 D24-maze_trap_a2 D25-maze_trap_a1
+D9-impossible_goal D10-final_torture5 D11-final_torture4 D12-final_torture3 D13-final_torture2 D14-final_torture1 D15-final_merge D16-conv_restricted3 D17-conv_restricted8-conv_restricted9 D18-conv_restricted2 D19-conv_restricted7-conv_restricted8 D20-conv_restricted1 D21-conv_restricted7-overflow_hell4 D22-overflow_hell1 D23-micro_gate1-overflow_hell4 D24-micro_gate1 D25-maze_trap_a2
+D10-impossible_goal D11-final_torture5 D12-final_torture4 D13-final_torture3 D14-final_torture2 D15-final_torture1 D16-final_merge D17-conv_restricted9 D18-conv_restricted2-conv_restricted3 D19-conv_restricted8 D20-conv_restricted1-conv_restricted2 D21-conv_restricted7 D22-conv_restricted1-overflow_hell1 D23-overflow_hell4 D24-micro_gate1-overflow_hell1 D25-micro_gate1
+D11-impossible_goal D12-final_torture5 D13-final_torture4 D14-final_torture3 D15-final_torture2 D16-final_torture1 D17-final_merge D18-conv_restricted3 D19-conv_restricted8-conv_restricted9 D20-conv_restricted2 D21-conv_restricted7-conv_restricted8 D22-conv_restricted1 D23-conv_restricted7-overflow_hell4 D24-overflow_hell1 D25-micro_gate1-overflow_hell4
+D12-impossible_goal D13-final_torture5 D14-final_torture4 D15-final_torture3 D16-final_torture2 D17-final_torture1 D18-final_merge D19-conv_restricted9 D20-conv_restricted2-conv_restricted3 D21-conv_restricted8 D22-conv_restricted1-conv_restricted2 D23-conv_restricted7 D24-conv_restricted1-overflow_hell1 D25-overflow_hell4
+D13-impossible_goal D14-final_torture5 D15-final_torture4 D16-final_torture3 D17-final_torture2 D18-final_torture1 D19-final_merge D20-conv_restricted3 D21-conv_restricted8-conv_restricted9 D22-conv_restricted2 D23-conv_restricted7-conv_restricted8 D24-conv_restricted1 D25-conv_restricted7-overflow_hell4
+D14-impossible_goal D15-final_torture5 D16-final_torture4 D17-final_torture3 D18-final_torture2 D19-final_torture1 D20-final_merge D21-conv_restricted9 D22-conv_restricted2-conv_restricted3 D23-conv_restricted8 D24-conv_restricted1-conv_restricted2 D25-conv_restricted7
+D15-impossible_goal D16-final_torture5 D17-final_torture4 D18-final_torture3 D19-final_torture2 D20-final_torture1 D21-final_merge D22-conv_restricted3 D23-conv_restricted8-conv_restricted9 D24-conv_restricted2 D25-conv_restricted7-conv_restricted8
+D16-impossible_goal D17-final_torture5 D18-final_torture4 D19-final_torture3 D20-final_torture2 D21-final_torture1 D22-final_merge D23-conv_restricted9 D24-conv_restricted2-conv_restricted3 D25-conv_restricted8
+D17-impossible_goal D18-final_torture5 D19-final_torture4 D20-final_torture3 D21-final_torture2 D22-final_torture1 D23-final_merge D24-conv_restricted3 D25-conv_restricted8-conv_restricted9
+D18-impossible_goal D19-final_torture5 D20-final_torture4 D21-final_torture3 D22-final_torture2 D23-final_torture1 D24-final_merge D25-conv_restricted9
+D19-impossible_goal D20-final_torture5 D21-final_torture4 D22-final_torture3 D23-final_torture2 D24-final_torture1 D25-final_merge
+D20-impossible_goal D21-final_torture5 D22-final_torture4 D23-final_torture3 D24-final_torture2 D25-final_torture1
+D21-impossible_goal D22-final_torture5 D23-final_torture4 D24-final_torture3 D25-final_torture2
+D22-impossible_goal D23-final_torture5 D24-final_torture4 D25-final_torture3
+D23-impossible_goal D24-final_torture5 D25-final_torture4
+D24-impossible_goal D25-final_torture5
+D25-impossible_goal
+
+
+
+
+==================================================================
+📍 CARTE : ./maps/easy/01_linear_path.txt
+==================================================================
+--- CONTENU DE LA CARTE ---
+# Easy Level 1: Simple linear path
+nb_drones: 2
+
+start_hub: start 0 0 [color=green]
+hub: waypoint1 1 0 [color=blue]
+hub: waypoint2 2 0 [color=blue]
+end_hub: goal 3 0 [color=red]
+
+connection: start-waypoint1
+connection: waypoint1-waypoint2
+connection: waypoint2-goal
+
+--- RÉSULTATS DE LA SIMULATION ---
+D1-waypoint1
+D1-waypoint2 D2-waypoint1
+D1-goal D2-waypoint2
+D2-goal
+
+
+
+
+==================================================================
+📍 CARTE : ./maps/easy/02_simple_fork.txt
+==================================================================
+--- CONTENU DE LA CARTE ---
+# Easy Level 2: Simple fork with two paths
+nb_drones: 4
+
+start_hub: start 0 0 [color=green]
+hub: junction 1 0 [color=yellow max_drones=2]
+hub: path_a 2 1 [color=blue]
+hub: path_b 2 -1 [color=blue]
+end_hub: goal 3 0 [color=red]
+
+connection: start-junction [max_link_capacity=2]
+connection: junction-path_a
+connection: junction-path_b
+connection: path_a-goal
+connection: path_b-goal
+
+--- RÉSULTATS DE LA SIMULATION ---
+D1-junction D2-junction
+D1-path_a D2-path_b D3-junction D4-junction
+D1-goal D2-goal D3-path_a D4-path_b
+D3-goal D4-goal
+
+
+
+
+==================================================================
+📍 CARTE : ./maps/easy/03_basic_capacity.txt
+==================================================================
+--- CONTENU DE LA CARTE ---
+# Easy Level 3: Basic capacity management
+nb_drones: 4
+
+start_hub: start 0 0 [color=green]
+hub: bottleneck 1 0 [color=orange max_drones=2]
+hub: wide_area 2 0 [color=blue max_drones=3]
+end_hub: goal 3 0 [color=red]
+
+connection: start-bottleneck [max_link_capacity=4]
+connection: bottleneck-wide_area [max_link_capacity=4]
+connection: wide_area-goal [max_link_capacity=4]
+
+--- RÉSULTATS DE LA SIMULATION ---
+D1-bottleneck D2-bottleneck
+D1-wide_area D2-wide_area D3-bottleneck D4-bottleneck
+D1-goal D2-goal D3-wide_area D4-wide_area
+D3-goal D4-goal
+
+
+
+
+==================================================================
+📍 CARTE : ./maps/hard/01_maze_nightmare.txt
+==================================================================
+--- CONTENU DE LA CARTE ---
+# Hard Level 1: Complex maze with multiple dead ends and loops
+nb_drones: 8
+
+start_hub: start 0 0 [color=green]
+hub: maze_a1 1 0 [color=blue max_drones=2]
+hub: maze_a2 2 0 [color=blue]
+hub: maze_b1 1 1 [color=blue]
+hub: maze_b2 2 1 [color=blue max_drones=2]
+hub: maze_c1 1 2 [color=blue]
+hub: maze_c2 3 1 [color=blue max_drones=2]
+hub: dead_end1 0 1 [color=red max_drones=2]
+hub: dead_end2 0 2 [color=red]
+hub: dead_end3 2 -1 [color=red]
+hub: trap_loop1 4 0 [zone=restricted color=orange]
+hub: trap_loop2 4 2 [zone=restricted color=orange]
+hub: bottleneck 5 1 [color=yellow max_drones=2]
+hub: final_stretch1 6 0 [zone=priority color=cyan]
+hub: final_stretch2 6 1 [zone=priority color=cyan]
+hub: final_stretch3 6 2 [zone=priority color=cyan]
+end_hub: goal 7 1 [color=green]
+
+# Main path connections
+connection: start-maze_a1 [max_link_capacity=2]
+connection: maze_a1-maze_a2
+connection: maze_a1-maze_b1
+connection: maze_b1-maze_b2
+connection: maze_b2-maze_c2
+connection: maze_c2-maze_a2
+connection: maze_c2-bottleneck
+
+# Dead end traps
+connection: start-dead_end1 [max_link_capacity=2]
+connection: dead_end1-dead_end2
+connection: maze_a2-dead_end3
+
+# Trap loops
+connection: maze_a2-trap_loop1
+connection: trap_loop1-trap_loop2
+connection: trap_loop2-maze_c1
+
+# Alternative paths
+connection: maze_b1-maze_c1
+connection: maze_c1-maze_b2
+connection: maze_b2-maze_a2
+
+# Final stretch
+connection: bottleneck-final_stretch1
+connection: bottleneck-final_stretch2
+connection: bottleneck-final_stretch3
+connection: final_stretch1-goal
+connection: final_stretch2-goal
+connection: final_stretch3-goal
+
+--- RÉSULTATS DE LA SIMULATION ---
+D1-maze_a1 D6-maze_a1
+D1-maze_a2 D2-maze_a1 D6-maze_b1
+D1-maze_c2 D2-maze_a2 D3-maze_a1 D6-maze_c1
+D1-bottleneck D2-maze_c2 D3-maze_a2 D4-maze_a1 D6-maze_c1-trap_loop2
+D1-final_stretch2 D2-bottleneck D3-maze_c2 D4-maze_a2 D5-maze_a1 D6-trap_loop2
+D1-goal D2-final_stretch2 D3-bottleneck D4-maze_c2 D5-maze_a2 D6-maze_c1
+D2-goal D3-final_stretch2 D4-bottleneck D5-maze_c2 D6-maze_b2 D7-maze_a1
+D3-goal D4-final_stretch2 D5-bottleneck D6-maze_c2 D7-maze_a2 D8-maze_a1
+D4-goal D5-final_stretch2 D6-bottleneck D7-maze_c2 D8-maze_a2
+D5-goal D6-final_stretch2 D7-bottleneck D8-maze_c2
+D6-goal D7-final_stretch2 D8-bottleneck
+D7-goal D8-final_stretch2
+D8-goal
+
+
+
+
+==================================================================
+📍 CARTE : ./maps/hard/02_capacity_hell.txt
+==================================================================
+--- CONTENU DE LA CARTE ---
+# Hard Level 2: Extreme capacity constraints with timing challenges
+nb_drones: 12
+
+start_hub: start 0 -1 [color=green]
+hub: gate1 1 0 [color=orange max_drones=1]
+hub: gate2 2 0 [color=orange max_drones=1]
+hub: gate3 3 0 [color=orange max_drones=1]
+hub: waiting_area1 1 1 [color=blue max_drones=4]
+hub: waiting_area2 2 1 [color=blue max_drones=4]
+hub: waiting_area3 3 1 [color=blue max_drones=4]
+hub: restricted_tunnel1 4 0 [zone=restricted color=red max_drones=2]
+hub: restricted_tunnel2 5 0 [zone=restricted color=red max_drones=2]
+hub: restricted_tunnel3 6 0 [zone=restricted color=red max_drones=2]
+hub: priority_bypass1 3 2 [zone=priority color=cyan max_drones=3]
+hub: priority_bypass2 4 2 [zone=priority color=cyan max_drones=3]
+hub: convergence 7 0 [color=yellow max_drones=6]
+hub: final_bottleneck 8 0 [color=orange max_drones=3]
+end_hub: goal 9 0 [color=green]
+
+# Sequential gates (major bottleneck)
+connection: start-gate1 [max_link_capacity=1]
+connection: start-gate2 [max_link_capacity=1]
+connection: start-gate3 [max_link_capacity=1]
+connection: gate1-gate2 [max_link_capacity=1]
+connection: gate2-gate3 [max_link_capacity=1]
+
+# Waiting areas for queue management
+connection: gate1-waiting_area1
+connection: gate2-waiting_area2
+connection: gate3-waiting_area3
+connection: waiting_area1-waiting_area2
+connection: waiting_area2-waiting_area3
+
+# Restricted tunnel path (slow but more capacity)
+connection: gate3-restricted_tunnel1
+connection: restricted_tunnel1-restricted_tunnel2
+connection: restricted_tunnel2-restricted_tunnel3
+connection: restricted_tunnel3-convergence
+
+# Priority bypass (fast but limited capacity)
+connection: waiting_area1-priority_bypass1
+connection: waiting_area2-priority_bypass2
+connection: priority_bypass1-priority_bypass2
+connection: priority_bypass2-convergence [max_link_capacity=2]
+
+# Final challenge
+connection: convergence-final_bottleneck [max_link_capacity=3]
+connection: final_bottleneck-goal
+
+# Emergency overflow paths
+connection: waiting_area3-convergence
+
+--- RÉSULTATS DE LA SIMULATION ---
+D1-gate3 D5-gate2
+D1-waiting_area3 D2-gate3 D5-waiting_area2
+D1-convergence D2-waiting_area3 D3-gate3 D5-priority_bypass2
+D1-final_bottleneck D2-convergence D3-waiting_area3 D4-gate3 D5-convergence D9-gate2
+D1-goal D2-final_bottleneck D3-convergence D4-waiting_area3 D5-convergence-restricted_tunnel3 D8-gate3 D9-waiting_area2
+D2-goal D3-final_bottleneck D4-convergence D5-restricted_tunnel3 D6-gate3 D8-gate3-restricted_tunnel1 D9-priority_bypass2
+D3-goal D4-final_bottleneck D5-convergence D6-waiting_area3 D7-gate3 D8-restricted_tunnel1 D9-convergence
+D4-goal D5-final_bottleneck D6-convergence D7-waiting_area3 D8-restricted_tunnel1-restricted_tunnel2 D9-convergence-restricted_tunnel3 D11-gate3
+D5-goal D6-final_bottleneck D7-convergence D8-restricted_tunnel2 D9-restricted_tunnel3 D10-gate3 D11-gate3-restricted_tunnel1
+D6-goal D7-final_bottleneck D8-restricted_tunnel2-restricted_tunnel3 D9-convergence D10-waiting_area3 D11-restricted_tunnel1
+D7-goal D8-restricted_tunnel3 D9-final_bottleneck D10-convergence D11-restricted_tunnel1-restricted_tunnel2 D12-gate3
+D8-convergence D9-goal D10-final_bottleneck D11-restricted_tunnel2 D12-waiting_area3
+D8-final_bottleneck D10-goal D11-restricted_tunnel2-restricted_tunnel3 D12-convergence
+D8-goal D11-restricted_tunnel3 D12-final_bottleneck
+D11-convergence D12-goal
+D11-final_bottleneck
+D11-goal
+
+
+
+
+==================================================================
+📍 CARTE : ./maps/hard/03_ultimate_challenge.txt
+==================================================================
+--- CONTENU DE LA CARTE ---
+# Hard Level 3: THE ULTIMATE CHALLENGE - All tricks combined
+nb_drones: 15
+
+start_hub: start 0 0 [color=green]
+
+# Layer 1: Initial distribution nightmare
+hub: dist_gate1 1 -1 [color=orange]
+hub: dist_gate2 1 1 [color=orange]
+hub: dist_gate3 1 0 [color=orange]
+
+# Layer 2: Dead end maze with loops
+hub: maze_trap1 1 2 [color=red]
+hub: maze_trap2 2 2 [color=red max_drones=3]
+hub: maze_loop1 2 1 [color=purple max_drones=3]
+hub: maze_loop2 3 1 [color=purple max_drones=3]
+hub: maze_loop3 4 1 [color=purple max_drones=3]
+hub: maze_loop4 3 2 [color=purple max_drones=3]
+hub: maze_correct 2 0 [color=blue max_drones=3]
+
+# Layer 3: Capacity nightmare section
+hub: bottleneck1 3 0 [color=yellow max_drones=2]
+hub: bottleneck2 4 0 [color=yellow max_drones=1]
+hub: overflow1 3 -1 [zone=restricted color=orange max_drones=3]
+hub: overflow2 4 -1 [zone=restricted color=orange max_drones=3]
+
+# Layer 4: Priority puzzle with traps
+hub: priority_hub 5 0 [zone=priority color=cyan max_drones=4]
+hub: priority_trap1 5 1 [zone=priority color=cyan]
+hub: priority_trap2 6 1 [zone=priority color=cyan]
+hub: priority_dead_end 6 2 [color=red]
+hub: priority_correct 6 0 [zone=priority color=cyan max_drones=3]
+
+# Layer 5: Multi-path convergence hell
+hub: conv_restricted1 7 0 [zone=restricted color=brown max_drones=2]
+hub: conv_restricted2 8 0 [zone=restricted color=brown max_drones=2]
+hub: conv_normal1 7 -1 [color=blue max_drones=3]
+hub: conv_normal2 8 -1 [color=blue max_drones=3]
+hub: conv_priority1 7 1 [zone=priority color=lime max_drones=2]
+hub: conv_priority2 8 1 [zone=priority color=lime max_drones=2]
+
+# Layer 6: Final gauntlet
+hub: final_merge 9 0 [color=magenta max_drones=8]
+hub: final_gate1 10 0 [color=orange max_drones=3]
+hub: final_gate2 11 0 [color=orange max_drones=2]
+hub: final_gate3 12 0 [color=orange max_drones=1]
+
+end_hub: goal 13 0 [color=gold]
+
+# Layer 1 connections
+connection: start-dist_gate1
+connection: start-dist_gate2 [max_link_capacity=2]
+connection: start-dist_gate3
+
+# Layer 2 connections - maze with traps
+connection: dist_gate1-maze_correct
+connection: dist_gate2-maze_trap1 [max_link_capacity=2]
+connection: dist_gate3-maze_loop1
+connection: maze_trap1-maze_trap2 [max_link_capacity=2]
+connection: maze_loop1-maze_loop2
+connection: maze_loop2-maze_loop3
+connection: maze_loop3-maze_loop4
+connection: maze_loop4-maze_loop1
+connection: maze_loop2-maze_correct
+
+# Layer 3 connections - capacity nightmare
+connection: maze_correct-bottleneck1 [max_link_capacity=2]
+connection: bottleneck1-bottleneck2
+connection: bottleneck1-overflow1
+connection: overflow1-overflow2 [max_link_capacity=2]
+connection: overflow2-bottleneck2
+
+# Layer 4 connections - priority puzzle
+connection: bottleneck2-priority_hub
+connection: priority_hub-priority_trap1
+connection: priority_hub-priority_correct
+connection: priority_trap1-priority_trap2
+connection: priority_trap2-priority_dead_end
+connection: priority_correct-conv_restricted1
+connection: priority_correct-conv_normal1
+connection: priority_correct-conv_priority1
+
+# Layer 5 connections - multi-path convergence
+connection: conv_restricted1-conv_restricted2
+connection: conv_normal1-conv_normal2
+connection: conv_priority1-conv_priority2 [max_link_capacity=2]
+connection: conv_restricted2-final_merge
+connection: conv_normal2-final_merge
+connection: conv_priority2-final_merge [max_link_capacity=2]
+
+# Layer 6 connections - final gauntlet
+connection: final_merge-final_gate1 [max_link_capacity=3]
+connection: final_gate1-final_gate2 [max_link_capacity=2]
+connection: final_gate2-final_gate3 [max_link_capacity=2]
+connection: final_gate3-goal [max_link_capacity=2]
+
+# Emergency bypass (very expensive)
+connection: overflow2-conv_normal1
+connection: priority_hub-conv_priority1
+
+--- RÉSULTATS DE LA SIMULATION ---
+D1-dist_gate1 D4-dist_gate3
+D1-maze_correct D2-dist_gate1 D4-maze_loop1 D7-dist_gate3
+D1-bottleneck1 D2-maze_correct D3-dist_gate1 D4-maze_loop2 D7-maze_loop1
+D1-bottleneck1-overflow1 D2-bottleneck1 D3-maze_correct D4-maze_correct D6-dist_gate1 D7-maze_loop2
+D1-overflow1 D2-bottleneck2 D3-bottleneck1 D4-bottleneck1 D5-dist_gate1 D6-maze_correct D7-maze_correct
+D1-overflow1-overflow2 D2-priority_hub D3-bottleneck1-overflow1 D4-bottleneck2 D5-maze_correct D7-bottleneck1 D9-dist_gate1 D12-dist_gate3
+D1-overflow2 D2-conv_priority1 D3-overflow1 D4-bottleneck2-overflow2 D5-bottleneck1 D6-bottleneck1 D7-bottleneck2 D8-dist_gate1 D9-maze_correct D12-maze_loop1
+D1-conv_normal1 D2-conv_priority2 D3-overflow1-overflow2 D4-overflow2 D5-bottleneck1-overflow1 D6-bottleneck2 D7-priority_hub D8-maze_correct D11-dist_gate1 D12-maze_loop2
+D1-conv_normal2 D2-final_merge D3-overflow2 D4-conv_normal1 D5-overflow1 D6-bottleneck2-overflow2 D8-bottleneck1 D9-bottleneck1 D10-dist_gate1 D11-maze_correct D12-maze_correct
+D1-final_merge D2-final_gate1 D3-conv_normal1 D4-conv_normal2 D5-overflow1-overflow2 D6-overflow2 D7-priority_correct D8-bottleneck1-overflow1 D9-bottleneck2 D10-maze_correct D12-bottleneck1
+D1-final_gate1 D2-final_gate2 D3-conv_normal2 D4-final_merge D5-overflow2 D6-conv_normal1 D7-conv_restricted1-priority_correct D8-overflow1 D9-priority_hub D10-bottleneck1 D11-bottleneck1 D12-bottleneck2 D14-dist_gate1
+D1-final_gate2 D2-final_gate3 D3-final_merge D4-final_gate1 D5-conv_normal1 D6-conv_normal2 D7-conv_restricted1 D8-overflow1-overflow2 D9-priority_correct D10-bottleneck1-overflow1 D11-bottleneck2 D12-bottleneck2-overflow2 D13-dist_gate1 D14-maze_correct
+D1-final_gate3 D2-goal D3-final_gate1 D4-final_gate2 D5-conv_normal2 D6-final_merge D7-conv_restricted1-conv_restricted2 D8-overflow2 D9-conv_restricted1-priority_correct D10-overflow1 D11-priority_hub D12-overflow2 D13-maze_correct
+D1-goal D3-final_gate2 D4-final_gate3 D5-final_merge D6-final_gate1 D7-conv_restricted2 D8-conv_normal1 D9-conv_restricted1 D10-overflow1-overflow2 D11-priority_correct D12-overflow1-overflow2 D13-bottleneck1 D14-bottleneck1 D15-dist_gate1
+D3-final_gate3 D4-goal D5-final_gate1 D6-final_gate2 D7-final_merge D8-conv_normal2 D9-conv_restricted1-conv_restricted2 D10-overflow2 D11-conv_restricted1-priority_correct D12-overflow1 D13-bottleneck1-overflow1 D14-bottleneck2 D15-maze_correct
+D3-goal D5-final_gate2 D6-final_gate3 D7-final_gate1 D8-final_merge D9-conv_restricted2 D10-conv_normal1 D11-conv_restricted1 D12-overflow1-overflow2 D13-overflow1 D14-priority_hub D15-bottleneck1
+D5-final_gate3 D6-goal D7-final_gate2 D8-final_gate1 D9-final_merge D10-conv_normal2 D11-conv_restricted1-conv_restricted2 D12-overflow2 D13-overflow1-overflow2 D14-priority_correct D15-bottleneck1-overflow1
+D5-goal D7-final_gate3 D8-final_gate2 D9-final_gate1 D10-final_merge D11-conv_restricted2 D12-conv_normal1 D13-overflow2 D14-conv_restricted1-priority_correct D15-overflow1
+D7-goal D8-final_gate3 D9-final_gate2 D10-final_gate1 D11-final_merge D12-conv_normal2 D13-conv_normal1 D14-conv_restricted1 D15-overflow1-overflow2
+D8-goal D9-final_gate3 D10-final_gate2 D11-final_gate1 D12-final_merge D13-conv_normal2 D14-conv_restricted1-conv_restricted2 D15-overflow2
+D9-goal D10-final_gate3 D11-final_gate2 D12-final_gate1 D13-final_merge D14-conv_restricted2 D15-conv_normal1
+D10-goal D11-final_gate3 D12-final_gate2 D13-final_gate1 D14-final_merge D15-conv_normal2
+D11-goal D12-final_gate3 D13-final_gate2 D14-final_gate1 D15-final_merge
+D12-goal D13-final_gate3 D14-final_gate2 D15-final_gate1
+D13-goal D14-final_gate3 D15-final_gate2
+D14-goal D15-final_gate3
+D15-goal
+
+
+
+
+==================================================================
+📍 CARTE : ./maps/medium/01_dead_end_trap.txt
+==================================================================
+--- CONTENU DE LA CARTE ---
+# Medium Level 1: Dead end trap - drones might get stuck
+nb_drones: 5
+
+start_hub: start 0 0 [color=green]
+hub: junction 1 0 [color=yellow max_drones=2]
+hub: dead_end 1 1 [color=red]
+hub: correct_path 2 0 [color=blue]
+hub: intermediate 3 0 [color=blue]
+end_hub: goal 4 0 [color=green]
+
+connection: start-junction [max_link_capacity=2]
+connection: junction-dead_end
+connection: junction-correct_path
+connection: correct_path-intermediate
+connection: intermediate-goal
+
+--- RÉSULTATS DE LA SIMULATION ---
+D1-junction
+D1-correct_path D2-junction
+D1-intermediate D2-correct_path D3-junction
+D1-goal D2-intermediate D3-correct_path D4-junction
+D2-goal D3-intermediate D4-correct_path D5-junction
+D3-goal D4-intermediate D5-correct_path
+D4-goal D5-intermediate
+D5-goal
+
+
+
+
+==================================================================
+📍 CARTE : ./maps/medium/02_circular_loop.txt
+==================================================================
+--- CONTENU DE LA CARTE ---
+# Medium Level 2: Circular loop with restricted zones
+nb_drones: 6
+
+start_hub: start 0 0 [color=green]
+hub: loop_a 1 0 [color=orange max_drones=2]
+hub: loop_b 2 0 [color=orange max_drones=2]
+hub: loop_c 2 1 [color=orange max_drones=2]
+hub: loop_d 1 1 [color=orange max_drones=2]
+hub: exit_point 3 0 [zone=restricted color=blue]
+end_hub: goal 4 0 [color=red]
+
+connection: start-loop_a [max_link_capacity=2]
+connection: loop_a-loop_b [max_link_capacity=2]
+connection: loop_b-loop_c [max_link_capacity=2]
+connection: loop_c-loop_d [max_link_capacity=2]
+connection: loop_d-loop_a [max_link_capacity=2]
+connection: loop_b-exit_point
+connection: exit_point-goal
+
+--- RÉSULTATS DE LA SIMULATION ---
+D1-loop_a
+D1-loop_b
+D1-exit_point-loop_b D2-loop_a
+D1-exit_point D2-loop_b
+D1-goal D2-exit_point-loop_b D3-loop_a
+D2-exit_point D3-loop_b
+D2-goal D3-exit_point-loop_b D4-loop_a
+D3-exit_point D4-loop_b
+D3-goal D4-exit_point-loop_b D5-loop_a
+D4-exit_point D5-loop_b
+D4-goal D5-exit_point-loop_b D6-loop_a
+D5-exit_point D6-loop_b
+D5-goal D6-exit_point-loop_b
+D6-exit_point
+D6-goal
+
+
+
+
+==================================================================
+📍 CARTE : ./maps/medium/03_priority_puzzle.txt
+==================================================================
+--- CONTENU DE LA CARTE ---
+# Medium Level 3: Priority zones create optimal path challenges
+nb_drones: 5
+
+start_hub: start 0 0 [color=green]
+hub: slow_path1 1 -1 [zone=restricted color=red]
+hub: slow_path2 2 -1 [color=red]
+hub: fast_junction 1 0 [zone=priority color=blue max_drones=2]
+hub: fast_path 2 0 [zone=priority color=blue]
+hub: merge_point 3 0 [color=yellow max_drones=3]
+end_hub: goal 4 0 [color=green]
+
+connection: start-slow_path1
+connection: start-fast_junction
+connection: slow_path1-slow_path2
+connection: slow_path2-merge_point
+connection: fast_junction-fast_path
+connection: fast_path-merge_point
+connection: merge_point-goal [max_link_capacity=2]
+
+--- RÉSULTATS DE LA SIMULATION ---
+D1-fast_junction D2-slow_path1-start
+D1-fast_path D2-slow_path1 D3-fast_junction
+D1-merge_point D2-slow_path2 D3-fast_path D4-fast_junction D5-slow_path1-start
+D1-goal D2-merge_point D3-merge_point D4-fast_path D5-slow_path1
+D2-goal D3-goal D4-merge_point D5-slow_path2
+D4-goal D5-merge_point
+D5-goal
+
+
+
+

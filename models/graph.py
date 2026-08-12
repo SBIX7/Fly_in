@@ -3,6 +3,7 @@ from parsing import DataType
 from models import Connection
 from models import Drone
 from collections import deque
+from models.colors import Colors
 
 
 class Graph:
@@ -164,6 +165,7 @@ class Graph:
 
     def run_simulation(self) -> None:
         self._respawn_drones()
+        color = Colors()
         for _, drone in self.drones.items():
             drone.path = self._calculate_path_for_drone(drone)
         turn = 1
@@ -178,7 +180,10 @@ class Graph:
                     if drone.path[turn] != drone.path[turn - 1]:
                         current_space = drone.path[turn]
                         if isinstance(current_space, Zone):
-                            destination = current_space.name
+                            zone_color = current_space.color
+                            destination = color.coloring_text(
+                                current_space.name, zone_color
+                            )
                         else:
                             destination = f"{current_space.zone_a}-"
                             destination += f"{current_space.zone_b}"
