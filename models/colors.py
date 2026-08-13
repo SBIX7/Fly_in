@@ -2,7 +2,10 @@ import random
 
 
 class Colors:
+    """Handles mapping and generation of ANSI color codes for terminals."""
+
     def __init__(self) -> None:
+        """Initializes the predefined dictionary of RGB values."""
         self.colors: dict[
             str, tuple[int, int, int] | list[tuple[int, int, int]]
         ] = {
@@ -34,17 +37,23 @@ class Colors:
         }
 
     def coloring_text(self, text: str, color: str | None) -> str:
-        """Return text colored with ANSI escape codes.
+        """
+        Return text colored with ANSI escape codes.
         Returns standard text if color is None or unknown.
+
+        Args:
+            text: The string to be colored.
+            color: The name of the color to apply.
+
+        Returns:
+            The formatted string with ANSI color codes.
         """
         if not color:
             return text
-
         rgb_color = self.colors.get(color.lower())
-
         if rgb_color is None:
             return text
-
+        # Handle multi-color formats like rainbow
         if isinstance(rgb_color, list):
             colored_text = ""
             for char in text:
@@ -53,5 +62,4 @@ class Colors:
             return colored_text
         else:
             r, g, b = rgb_color
-
         return f"\033[38;2;{r};{g};{b}m{text}\033[0m"

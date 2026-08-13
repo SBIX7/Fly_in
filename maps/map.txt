@@ -7,8 +7,8 @@
 
 nb_drones: 50
 
-start_hub: Source 0 30 [color=white max_drones=250]
-end_hub: Sink 100 30 [color=white max_drones=250]
+start_hub: Source 0 30 [color=green max_drones=250]
+end_hub: Sink 100 30 [color=rainbow max_drones=250]
 
 # --- THE MESH NODES (Capacity 2 to force rapid saturation) ---
 # Column 1

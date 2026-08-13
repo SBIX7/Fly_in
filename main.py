@@ -1,3 +1,5 @@
+"""Main entry point for the Fly-in drone simulation project."""
+
 from models import Graph
 from parsing import Parser
 import argparse
@@ -10,16 +12,18 @@ if __name__ == "__main__":
         type=str,
         nargs="?",
         help="Add path to map",
-        default="./map.txt",
+        default="./maps/map.txt",
     )
     args = arg_parser.parse_args()
     parser = Parser(args.map)
+
+    # Protect the entire execution block to handle raised exception gracefully
     try:
         parser.parse()
+        data = parser.data_parsed
+        graph = Graph(data)
+        graph.fill_zones(parser.connections)
+        graph.run_simulation()
     except Exception as e:
         print(e)
         sys.exit(2)
-    data = parser.data_parsed
-    graph = Graph(data)
-    graph.fill_zones(parser.connections)
-    graph.run_simulation()

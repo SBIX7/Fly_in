@@ -321,7 +321,11 @@ class Parser:
                 # Ignore empty lines and comments
                 if line.startswith("#") or line == "":
                     continue
-
+                # Ignore inline comments
+                if "#" in line:
+                    line = line.split("#")[0].strip()
+                    if line == "":
+                        continue
                 # Enforce that nb_drones is the very first configuration line
                 if not first_valid_line_parsed:
                     if not line.startswith("nb_drones"):
