@@ -25,5 +25,5 @@ if __name__ == "__main__":
         graph.fill_zones(parser.connections)
         graph.run_simulation()
     except Exception as e:
-        print(e)
+        print(*e.args)
         sys.exit(2)

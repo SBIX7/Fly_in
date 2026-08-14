@@ -7,10 +7,10 @@ Fly-in is an advanced algorithmic simulation project focused on optimizing the r
 
 The project features a highly robust custom parser, an optimized pathfinding engine capable of solving extreme bottlenecks, and a dynamic visual representation system. It has been heavily benchmarked and successfully beats the reference records on the hardest maps, including completing the "Challenger: The Impossible Dream" map (25 drones) in just 43 turns (reference record: 45 turns).
 
-## Technical Choices & Implementation Strategy
+## Algorithm Explanation
 To achieve maximum throughput and avoid deadlocks, the core routing logic avoids naive pathfinding (which would cause traffic jams) and instead relies on a **Time-State Breadth-First Search (BFS)** combined with a **Turn-by-Turn Reservation Agenda**.
 
-**Key algorithmic strategies implemented:**
+**Key algorithmic strategies and design decisions implemented:**
 * **Graph Traversal & Pathfinding:** A customized BFS algorithm computes the shortest paths while considering the specific movement cost of each zone type (`normal` = 1 turn, `restricted` = 2 turns, `priority` = 1 turn with precedence). 
 * **State & Capacity Tracking:** Instead of just finding a path, the algorithm dynamically checks the availability of a zone or a connection at a specific future turn `T`. 
 * **Conflict Resolution:** If a drone attempts to enter a zone that is at maximum capacity (defined by `max_drones`), or use a connection that has reached its `max_link_capacity`, the algorithm forces strategic waiting or reroutes the drone to an alternative path.
@@ -21,6 +21,31 @@ To enhance the user experience and make debugging intuitive, a custom **ANSI Col
 * **Dynamic Feedback:** Zones are visually color-coded based on their parsed metadata.
 * **Readability:** Colors were mathematically adjusted (e.g., brightening pure blue or replacing absolute black with gray) to ensure maximum contrast and readability on dark terminal backgrounds.
 * **The "Rainbow" Effect:** A custom text-formatting loop was implemented for the `rainbow` color attribute, applying a sequential, letter-by-letter color shift. This not only fulfills the visual representation requirement but drastically improves the simulation's aesthetics, making the final delivery of drones visually rewarding.
+
+## Example Input and Expected Output
+Below is a simple demonstration of the program's functionality, showing how it routes 2 drones through a restricted bottleneck.
+
+**Input Map (`map.txt`):**
+```text
+nb_drones: 2
+
+start_hub: Start 0 0 [color=green]
+hub: Tunnel 1 0 [zone=restricted color=red max_drones=1]
+end_hub: Goal 2 0 [color=blue]
+
+connection: Start-Tunnel
+connection: Tunnel-Goal
+```
+
+**Expected Output (Simulation execution):**
+*(Note: Terminal output will include ANSI color codes based on the map's metadata)*
+```text
+D1-Start-Tunnel
+D1-Tunnel
+D1-Goal D2-Start-Tunnel
+D2-Tunnel
+D2-Goal
+```
 
 ## Instructions
 
@@ -35,13 +60,13 @@ The project includes a `Makefile` to automate common tasks:
    ```bash
    make install
    ```
-2. **Run the simulation** (uses the default `./map.txt`):
+2. **Run the simulation** (uses the default `./maps/map.txt`):
    ```bash
    make run
    ```
 3. **Run a specific map** (using the Python script directly):
    ```bash
-   python main.py ./maps/challenger/01_the_impossible_dream.txt
+   python main.py --map ./maps/challenger/01_the_impossible_dream.txt
    ```
 4. **Run strict linting** (to verify absolute type-safety):
    ```bash
@@ -58,5 +83,4 @@ The project includes a `Makefile` to automate common tasks:
 * **AI Usage Disclosure:** Artificial Intelligence (Google Gemini) was used during the development of this project as an interactive peer-assistant. It was specifically utilized to:
   1. Brainstorm and stress-test edge cases in the Regex patterns used by the file parser to ensure no garbage data could silently corrupt the graph.
   2. Optimize the RGB-to-ANSI color conversion logic for the visual representation engine.
-  3. Act as a sounding board to strictly verify MyPy type-hinting compliance across complex data structures like nested `TypedDict`. 
   All core algorithmic logic and architectural choices were independently engineered and fully understood before implementation.

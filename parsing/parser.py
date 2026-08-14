@@ -1,3 +1,5 @@
+"""Parser module for reading and validating map configuration files."""
+
 from typing import Match, TypedDict
 import re
 
@@ -56,7 +58,9 @@ class Parser:
         self.line_number: int = 0
         self.connections: set[tuple[str, str]] = set()
 
-    def _valid_meta_hub_(self, meta_data: str | None) -> MetaHub:
+    def _valid_meta_hub_(
+        self, meta_data: str | None, hub_type: str | None = None
+    ) -> MetaHub:
         """Validates and extracts hub metadata."""
         meta_hub_param: set[str] = {"zone", "color", "max_drones"}
         ret_dict: MetaHub = {"zone": "normal", "color": None, "max_drones": 1}
@@ -69,6 +73,7 @@ class Parser:
         cleaned_meta = re.sub(
             r"\w+\s*=\s*[a-zA-Z0-9_-]+", "", meta_data
         ).strip()
+
         if cleaned_meta != "":
             raise DataError(
                 f"[Parse Error] line {self.line_number}:",
@@ -94,13 +99,16 @@ class Parser:
                 if param == "max_drones":
                     try:
                         max_drone = int(value)
-                        # Capacity must be strictly positive
-                        if max_drone <= 0:
+                        # Allow zero or negative capacity for start/end hubs
+                        if max_drone <= 0 and hub_type not in (
+                            "start_hub",
+                            "end_hub",
+                        ):
                             raise ValueError
                     except ValueError:
                         raise DataError(
                             f"[Parse Error] line {self.line_number}:",
-                            "Invalid meta data. Max drone must be in N.",
+                            "Invalid meta data. Max drone must be in N*.",
                         )
 
                 if param == "zone":
@@ -140,12 +148,20 @@ class Parser:
         hub_a: str = match_objet.group(1)
         hub_b: str = match_objet.group(2)
 
+        # Prevent a zone from connecting to itself
+        if hub_a == hub_b:
+            raise DataError(
+                f"[Parse Error] line {self.line_number}:",
+                f"Invalid connection. Self connection ({hub_a}-{hub_b}).",
+            )
+
         # Both hubs must exist before creating a connection
         if hub_a not in self.data_parsed["hubs"]:
             raise DataError(
                 f"[Parse Error] line {self.line_number}:",
                 f"Invalid connection. '{hub_a}' doesn't exist.",
             )
+
         if hub_b not in self.data_parsed["hubs"]:
             raise DataError(
                 f"[Parse Error] line {self.line_number}:",
@@ -164,10 +180,19 @@ class Parser:
             )
 
         self.connections.add(connection)
-        link_cap = 1
 
+        link_cap = 1
         if match_objet.group(3) is not None:
             # We use \s* here too to be safe with spaces
+            cleaned_meta = re.sub(
+                r"\s*max_link_capacity\s*=\s*(-?\d+)", "", match_objet.group(3)
+            ).strip()
+            if cleaned_meta != "":
+                raise DataError(
+                    f"[Parse Error] line {self.line_number}:",
+                    "Invalid syntax/garbage in connection metadata: "
+                    f"'{cleaned_meta}'",
+                )
             match = re.search(
                 r"\s*max_link_capacity\s*=\s*(-?\d+)", match_objet.group(3)
             )
@@ -178,7 +203,6 @@ class Parser:
                     "Must be max_link_capacity=x (x is a positive integer).",
                 )
             link_cap = int(match.group(1))
-
             # Capacity must be strictly positive
             if link_cap <= 0:
                 raise DataError(
@@ -248,7 +272,7 @@ class Parser:
                         "Invalid coordinates for hub. Overlap",
                     )
 
-        meta_data = self._valid_meta_hub_(match_objet.group(4))
+        meta_data = self._valid_meta_hub_(match_objet.group(4), hub_type)
 
         # Assign the hub to the right category
         if hub_type == "start_hub":
@@ -312,7 +336,6 @@ class Parser:
     def parse(self) -> None:
         """Reads the config file line by line and parses its contents."""
         first_valid_line_parsed = False
-
         with open(self.config_file_path) as f:
             for line in f:
                 self.line_number += 1
@@ -321,11 +344,13 @@ class Parser:
                 # Ignore empty lines and comments
                 if line.startswith("#") or line == "":
                     continue
+
                 # Ignore inline comments
                 if "#" in line:
                     line = line.split("#")[0].strip()
                     if line == "":
                         continue
+
                 # Enforce that nb_drones is the very first configuration line
                 if not first_valid_line_parsed:
                     if not line.startswith("nb_drones"):
@@ -355,7 +380,6 @@ class Parser:
                             "Extra inputs are not permitted",
                         )
                     self.data_parsed["nb_drones"] = int(match.group(1))
-
                     if self.data_parsed["nb_drones"] <= 0:
                         raise DataError(
                             f"[Parse Error] line {self.line_number}:",
@@ -411,7 +435,6 @@ class Parser:
                             "Syntax error or invalid format.",
                         )
                     self._connection_validator(match)
-
                 else:
                     raise DataError(
                         f"[Parse Error] line {self.line_number}:",

@@ -110,7 +110,7 @@ connection: F3-E4
 connection: F3-F4
 
 # Extracting the water to the Sink
-connection: A4-Sink
+connection: A4-Sink [max_link_capacity=2]
 connection: B4-Sink
 connection: C4-Sink [max_link_capacity=3]
 connection: D4-Sink [max_link_capacity=3]
