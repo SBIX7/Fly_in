@@ -1,0 +1,15 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+
+# Virtual Environments
+venv/
+.venv/
+env/
+.env/
+
+# Caches (Linters & Typers)
+.mypy_cache/
+
+# IDE / Editor
+.vscode/
