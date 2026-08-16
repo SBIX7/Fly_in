@@ -83,4 +83,5 @@ The project includes a `Makefile` to automate common tasks:
 * **AI Usage Disclosure:** Artificial Intelligence (Google Gemini) was used during the development of this project as an interactive peer-assistant. It was specifically utilized to:
   1. Brainstorm and stress-test edge cases in the Regex patterns used by the file parser to ensure no garbage data could silently corrupt the graph.
   2. Optimize the RGB-to-ANSI color conversion logic for the visual representation engine.
-  All core algorithmic logic and architectural choices were independently engineered and fully understood before implementation.
+
+All core algorithmic logic and architectural choices were independently engineered and fully understood before implementation.

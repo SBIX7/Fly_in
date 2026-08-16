@@ -24,6 +24,10 @@ if __name__ == "__main__":
         graph = Graph(data)
         graph.fill_zones(parser.connections)
         graph.run_simulation()
+    except KeyboardInterrupt:
+        print("\n[Interruption] Simulation stopped by user (Ctrl+C).")
+        sys.exit(2)
+
     except Exception as e:
         print(*e.args)
         sys.exit(2)

@@ -232,8 +232,8 @@ class Parser:
         # Check if the name is already taken
         if (
             (name in self.data_parsed["hubs"])
-            or (name is self.data_parsed["start_hub"])
-            or (name is self.data_parsed["end_hub"])
+            or (name == self.data_parsed["start_hub"])
+            or (name == self.data_parsed["end_hub"])
         ):
             raise DataError(
                 f"[Parse Error] line {self.line_number}:",
@@ -372,18 +372,21 @@ class Parser:
                     if match is None:
                         raise DataError(
                             f"[Parse Error] line {self.line_number}:",
-                            "Syntax error or invalid format.",
+                            "Invalid 'nb_drones' format. "
+                            "Expected: 'nb_drones: <number>'",
                         )
                     if match.group(2):
                         raise DataError(
                             f"[Parse Error] line {self.line_number}:",
-                            "Extra inputs are not permitted",
+                            "Trailing characters detected. Extra inputs "
+                            "are not permitted after the drone count.",
                         )
                     self.data_parsed["nb_drones"] = int(match.group(1))
                     if self.data_parsed["nb_drones"] <= 0:
                         raise DataError(
                             f"[Parse Error] line {self.line_number}:",
-                            "Negative/Null numbers are not permitted",
+                            "Invalid drone count. Number of drones "
+                            "must be a positive integer.",
                         )
 
                 # Extracting start_hub
@@ -392,12 +395,14 @@ class Parser:
                     if match is None:
                         raise DataError(
                             f"[Parse Error] line {self.line_number}:",
-                            "Syntax error or invalid format.",
+                            "Invalid 'start_hub' format. Expected: "
+                            "'start_hub: <name> <x> <y> [metadata]'",
                         )
                     if self.data_parsed["start_hub"] is not None:
                         raise DataError(
                             f"[Parse Error] line {self.line_number}:",
-                            "Start hub is already initialized",
+                            "Duplicate declaration. A 'start_hub' "
+                            "is already initialized.",
                         )
                     self._hub_validator(match, "start_hub")
 
@@ -407,12 +412,14 @@ class Parser:
                     if match is None:
                         raise DataError(
                             f"[Parse Error] line {self.line_number}:",
-                            "Syntax error or invalid format.",
+                            "Invalid 'end_hub' format. Expected: "
+                            "'end_hub: <name> <x> <y> [metadata]'",
                         )
                     if self.data_parsed["end_hub"] is not None:
                         raise DataError(
                             f"[Parse Error] line {self.line_number}:",
-                            "End hub is already initialized",
+                            "Duplicate declaration. An 'end_hub' "
+                            "is already initialized.",
                         )
                     self._hub_validator(match, "end_hub")
 
@@ -422,7 +429,8 @@ class Parser:
                     if match is None:
                         raise DataError(
                             f"[Parse Error] line {self.line_number}:",
-                            "Syntax error or invalid format.",
+                            "Invalid 'hub' format. Expected: "
+                            "'hub: <name> <x> <y> [metadata]'",
                         )
                     self._hub_validator(match, None)
 
@@ -432,13 +440,19 @@ class Parser:
                     if match is None:
                         raise DataError(
                             f"[Parse Error] line {self.line_number}:",
-                            "Syntax error or invalid format.",
+                            "Invalid 'connection' format. Expected: "
+                            "'connection: <zone1>-<zone2> [metadata]'",
                         )
                     self._connection_validator(match)
                 else:
+                    directive = (
+                        line.split(":")[0] if ":" in line else line.split()[0]
+                    )
                     raise DataError(
                         f"[Parse Error] line {self.line_number}:",
-                        "Data is not valid or not accomplished",
+                        f"Unknown directive '{directive}'. Expected "
+                        "'nb_drones:', 'start_hub:', 'end_hub:', "
+                        "'hub:', or 'connection:'.",
                     )
 
         # Final integrity checks after the whole file is read
